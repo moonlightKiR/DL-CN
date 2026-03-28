@@ -1,3 +1,4 @@
-.pdf
-.python-version
+data/
+data_compressed/
+documentation/
 .venv
