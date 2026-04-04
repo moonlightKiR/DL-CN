@@ -2,3 +2,6 @@ data/
 data_compressed/
 documentation/
 .venv
+__pycache__/
+images/
+.DS_Store
