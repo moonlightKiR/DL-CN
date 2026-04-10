@@ -1,5 +1,6 @@
 import logging
 import pandas as pd
+from datetime import datetime
 from pathlib import Path
 
 from data.zip_manager import ZipExtractor
@@ -17,8 +18,21 @@ from eda.comparasion import DescriptiveStatsComparator, EDAComparisonService
 from eda.data_augmentation import get_default_augmentation_service
 from data.data_viewer import get_default_viewer
 
-# Configuración de Logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configuración de Logging y Directorios
+log_dir = Path("log")
+log_dir.mkdir(exist_ok=True)
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+log_path = log_dir / f"pipeline_{timestamp}.log"
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(log_path, encoding='utf-8'),
+        logging.StreamHandler() # Mantenemos salida por consola
+    ],
+    force=True # Forzamos la configuración para que el fichero de log funcione siempre
+)
 logger = logging.getLogger(__name__)
 
 def run_pipeline():
@@ -46,11 +60,12 @@ def run_pipeline():
     organizer = MelanomaDataService(FileMover())
     organizer.organize(base_path)
 
-    # 1.5 ENHANCEMENT: Super Resolución x2 (Optimizado)
-    logger.info("=== STEP 1.5: IMAGE ENHANCEMENT (FSRCNN x2 - FAST) ===")
-    enhancer = SuperResolutionEnhancer(model_path="models/FSRCNN_x2.pb")
+    # 1.5 ENHANCEMENT: Super Resolución x4 (FSRCNN + Laplacian)
+    logger.info("=== STEP 1.5: IMAGE ENHANCEMENT (FSRCNN PyTorch x4 + Laplacian) ===")
+    enhancer = SuperResolutionEnhancer(model_path="models/FSRCNN_x4.pth")
+    enhancer.load_model() # Cargamos pesos en GPU/MPS
     
-    # El procesamiento paralelo se encarga de cargar el modelo en cada núcleo
+    # Procesamos las carpetas de entrenamiento
     train_path = data_path / "train"
     if train_path.exists():
         enhancer.upscale_directory(train_path / "benign")
@@ -96,8 +111,26 @@ def run_pipeline():
         # 4. AUGMENTATION
         logger.info("=== STEP 4: DATA AUGMENTATION ===")
         aug_service = get_default_augmentation_service()
-        aug_service.augment_directory(train_path / "benign", variants_per_image=1)
-        aug_service.augment_directory(train_path / "malignant", variants_per_image=1)
+        aug_service.augment_directory(train_path / "benign", variants_per_image=3)
+        aug_service.augment_directory(train_path / "malignant", variants_per_image=3)
+
+        # 4.5 POST-AUGMENTATION EDA (Validación de impacto)
+        logger.info("=== STEP 4.5: POST-AUGMENTATION ANALYSIS ===")
+        results_post = explorer.compare_train_data(train_path)
+        df_benign_post = pd.DataFrame(results_post['benign'])
+        df_malignant_post = pd.DataFrame(results_post['malignant'])
+
+        comparison_report_post = eda_service.execute_analysis(df_benign_post, df_malignant_post)
+        print("\n--- RESUMEN DE DIFERENCIAS (POST-AUGMENTATION) ---")
+        print(comparison_report_post[['benign_avg', 'malignant_avg', 'percentage_change']].head(10))
+
+        # Guardamos la gráfica del estado final para comparar con el original
+        EDAVisualizer.save_comparison_plots(
+            df_benign_post, 
+            df_malignant_post, 
+            metrics=key_metrics, 
+            save_path=base_path / "images" / "eda_boxplots_augmented.png"
+        )
 
         # 5. VISUALIZATION: Guardado de resultados en disco
         logger.info("=== STEP 5: SAVING VISUALIZATIONS ===")

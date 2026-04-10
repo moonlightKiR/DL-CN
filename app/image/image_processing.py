@@ -7,8 +7,13 @@ from typing import List, Dict, Any, Optional
 from PIL import Image
 import numpy as np
 
-# Configuración de logging unificada
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Importaciones de PyTorch para ESRGAN
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torchvision.transforms.functional as TF
+
+# Configuración de logging unificada (Gestionada por main.py)
 logger = logging.getLogger(__name__)
 
 class ImageAnalyzer(ABC):
@@ -126,48 +131,138 @@ class MelanomaPatternExplorer:
         
         return full_report
 
+# --- ARQUITECTURA FSRCNN (Fast Super-Resolution CNN) ---
+
+class FSRCNN(nn.Module):
+    """
+    Arquitectura ultra-ligera diseñada para velocidad extrema.
+    Procesa habitualmente 1 solo canal (Luminancia).
+    """
+    def __init__(self, scale_factor=4, num_channels=1):
+        super(FSRCNN, self).__init__()
+        # 1. Feature extraction
+        self.first_part = nn.Sequential(
+            nn.Conv2d(num_channels, 56, kernel_size=5, padding=2),
+            nn.PReLU(56)
+        )
+        # 2. Shrinking, 3. Non-linear Mapping, 4. Expanding
+        self.mid_part = nn.Sequential(
+            nn.Conv2d(56, 12, kernel_size=1),
+            nn.PReLU(12),
+            nn.Conv2d(12, 12, kernel_size=3, padding=1),
+            nn.PReLU(12),
+            nn.Conv2d(12, 12, kernel_size=3, padding=1),
+            nn.PReLU(12),
+            nn.Conv2d(12, 12, kernel_size=3, padding=1),
+            nn.PReLU(12),
+            nn.Conv2d(12, 12, kernel_size=3, padding=1),
+            nn.PReLU(12),
+            nn.Conv2d(12, 56, kernel_size=1),
+            nn.PReLU(56)
+        )
+        # 5. Deconvolution (Upsampling)
+        self.last_part = nn.ConvTranspose2d(
+            56, num_channels, kernel_size=9, stride=scale_factor, 
+            padding=4, output_padding=scale_factor-1
+        )
+
+    def forward(self, x):
+        x = self.first_part(x)
+        x = self.mid_part(x)
+        x = self.last_part(x)
+        return x
+
+# --- SERVICIO DE SUPER RESOLUCIÓN Y REFINAMIENTO ---
+
 class SuperResolutionEnhancer:
     """
-    Single Responsibility: Mejorar la resolución de imágenes usando 
-    modelos de Deep Learning (Redes Neuronales Convolucionales).
-    Versión Optimizada: Uso de FSRCNN (Rápido) y procesamiento paralelo.
+    Servicio híbrido: Super Resolución (FSRCNN Y-Channel) + Enfoque (Laplaciano).
+    Soporta modelos de 1 canal (estándar de FSRCNN .pth).
     """
-    def __init__(self, model_path: str = "models/FSRCNN_x2.pb"):
+    def __init__(self, model_path: str = "models/FSRCNN_x4.pth"):
         self.model_path = Path(model_path)
+        if torch.backends.mps.is_available():
+            self.device = torch.device("mps")
+        elif torch.cuda.is_available():
+            self.device = torch.device("cuda")
+        else:
+            self.device = torch.device("cpu")
+            
+        self.model = None
         self._is_ready = self.model_path.exists()
 
-    def _upscale_single_image(self, img_path: Path):
-        """Tarea para un solo núcleo de CPU (Hilo)."""
-        sr_path = img_path.with_name(f"{img_path.stem}_sr{img_path.suffix}")
-        if sr_path.exists(): 
+    def load_model(self):
+        """Carga el modelo FSRCNN x4 (1 canal)."""
+        if not self._is_ready:
+            logger.warning(f"No se encontró el modelo FSRCNN en {self.model_path}")
             return
-        
+
         try:
-            # Una instancia por hilo para evitar bloqueos internos del framework
-            sr = cv2.dnn_superres.DnnSuperResImpl_create()
-            sr.readModel(str(self.model_path))
-            sr.setModel("fsrcnn", 2) # FSRCNN x2
+            self.model = FSRCNN(scale_factor=4, num_channels=1)
+            state_dict = torch.load(self.model_path, map_location=torch.device('cpu'), weights_only=True)
             
-            img = cv2.imread(str(img_path))
-            if img is not None:
-                upscaled = sr.upsample(img)
-                if cv2.imwrite(str(sr_path), upscaled):
-                    img_path.unlink()
+            if 'params' in state_dict: state_dict = state_dict['params']
+            new_state_dict = {}
+            for k, v in state_dict.items():
+                new_state_dict[k.replace('module.', '').replace('model.', '')] = v
+            
+            self.model.load_state_dict(new_state_dict, strict=True)
+            self.model.eval().to(self.device)
+            logger.info(f"FSRCNN x4 (Luminancia) cargado con éxito en {self.device}")
+        except Exception as e:
+            logger.error(f"Error cargando FSRCNN: {e}")
+            self._is_ready = False
+
+    @torch.no_grad()
+    def upscale_image(self, img_pil: Image.Image) -> Image.Image:
+        """Escala el canal Y con PyTorch y CbCr con Bicubic."""
+        # 1. Preparar canales YCbCr
+        ycbcr = img_pil.convert('YCbCr')
+        y, cb, cr = ycbcr.split()
+
+        # 2. Inferencia en canal Y
+        img_t = TF.to_tensor(y).unsqueeze(0).to(self.device)
+        output_y = self.model(img_t).squeeze().cpu().clamp(0, 1)
+        output_y_pil = TF.to_pil_image(output_y)
+
+        # 3. Rescale Cb y Cr de forma tradicional (Bicubic)
+        new_size = output_y_pil.size
+        output_cb = cb.resize(new_size, resample=Image.BICUBIC)
+        output_cr = cr.resize(new_size, resample=Image.BICUBIC)
+
+        # 4. Recombinar y aplicar Sharpening Laplaciano
+        sr_img_pil = Image.merge('YCbCr', (output_y_pil, output_cb, output_cr)).convert('RGB')
+        img_np = np.array(sr_img_pil)
+        
+        laplacian = cv2.Laplacian(img_np, cv2.CV_64F)
+        sharpened = img_np - (0.3 * laplacian)
+        
+        return Image.fromarray(np.clip(sharpened, 0, 255).astype(np.uint8))
+
+    def _process_single_file(self, img_path: Path):
+        """Procesa y limpia un archivo individual."""
+        sr_path = img_path.with_name(f"{img_path.stem}_sr{img_path.suffix}")
+        if sr_path.exists(): return
+
+        try:
+            with Image.open(img_path) as img_pil:
+                sr_img = self.upscale_image(img_pil)
+                sr_img.save(sr_path, quality=95)
+                img_path.unlink() # Borrar original tras éxito
         except Exception:
-            # Silenciamos errores individuales para no interrumpir el flujo masivo
             pass
 
     def upscale_directory(self, directory: Path):
-        """Usa todos los núcleos de tu procesador para ir a máxima velocidad."""
-        if not self._is_ready:
-            logger.warning(f"No se encontró el modelo en {self.model_path}. Saltando mejora.")
+        """Ejecución masiva en el directorio de entrenamiento."""
+        if not self._is_ready or self.model is None:
             return
 
         image_files = [f for f in directory.glob("*") if f.suffix.lower() in ['.jpg', '.png'] and "_sr" not in f.name]
-        logger.info(f"🚀 Iniciando Super-Resolución FSRCNN PARALELA en {directory.name} ({len(image_files)} archivos)...")
+        logger.info(f"Iniciando Pipeline Rápido (FSRCNN + Laplaciano) en {directory.name}...")
         
-        # Procesamiento paralelo masivo usando todos los hilos (OpenCV libera el GIL)
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            executor.map(self._upscale_single_image, image_files)
-            
-        logger.info(f"✅ Mejora de imágenes completada en {directory.name}.")
+        for i, img_path in enumerate(image_files):
+            self._process_single_file(img_path)
+            if i % 100 == 0:
+                logger.info(f"Progreso {directory.name}: {i}/{len(image_files)}")
+
+        logger.info(f"Pipeline completado en {directory.name}.")

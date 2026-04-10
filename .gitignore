@@ -3,5 +3,8 @@ data_compressed/
 documentation/
 .venv
 __pycache__/
+examples/
 images/
 .DS_Store
+*.pth
+*.pb
