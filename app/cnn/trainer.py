@@ -36,7 +36,7 @@ class MelanomaTrainer:
         self.device = device or torch.device("mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu")
         self.model = model.to(self.device)
         
-        self.criterion = nn.CrossEntropyLoss()
+        self.criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
         self.optimizer = optim.Adam(
             self.model.parameters(), 
             lr=config.learning_rate,

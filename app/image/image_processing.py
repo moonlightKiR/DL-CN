@@ -240,17 +240,24 @@ class SuperResolutionEnhancer:
         return Image.fromarray(np.clip(sharpened, 0, 255).astype(np.uint8))
 
     def _process_single_file(self, img_path: Path):
-        """Procesa y limpia un archivo individual."""
+        """Procesa y limpia un archivo individual asegurando idempotencia."""
         sr_path = img_path.with_name(f"{img_path.stem}_sr{img_path.suffix}")
-        if sr_path.exists(): return
+        
+        # Si ya existe la versión SR, solo borramos el original si ha reaparecido
+        if sr_path.exists():
+            try:
+                img_path.unlink()
+            except Exception:
+                pass
+            return
 
         try:
             with Image.open(img_path) as img_pil:
                 sr_img = self.upscale_image(img_pil)
                 sr_img.save(sr_path, quality=95)
                 img_path.unlink() # Borrar original tras éxito
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error(f"Error procesando {img_path.name}: {e}")
 
     def upscale_directory(self, directory: Path):
         """Ejecución masiva en el directorio de entrenamiento."""

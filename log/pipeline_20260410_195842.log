@@ -1,0 +1,21 @@
+2026-04-10 19:58:42,708 - INFO - Ruta de ejecución detectada: /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN
+2026-04-10 19:58:42,709 - INFO - === STEP 1: SETUP DATA ===
+2026-04-10 19:58:42,709 - INFO - Datos ya organizados en data/train. Saltando extracción.
+2026-04-10 19:58:42,709 - INFO - === STEP 1.5: IMAGE ENHANCEMENT (FSRCNN PyTorch x4 + Laplacian) ===
+2026-04-10 19:58:42,754 - INFO - FSRCNN x4 (Luminancia) cargado con éxito en mps
+2026-04-10 19:58:42,772 - INFO - Iniciando Pipeline Rápido (FSRCNN + Laplaciano) en benign...
+2026-04-10 19:58:42,772 - INFO - Pipeline completado en benign.
+2026-04-10 19:58:42,792 - INFO - Iniciando Pipeline Rápido (FSRCNN + Laplaciano) en malignant...
+2026-04-10 19:58:42,792 - INFO - Pipeline completado en malignant.
+2026-04-10 19:58:42,792 - INFO - === STEP 2: PATTERN ANALYSIS ===
+2026-04-10 19:58:42,805 - INFO - Procesando 6289 imágenes en 'benign'...
+2026-04-10 20:00:14,744 - INFO - Procesando 5590 imágenes en 'malignant'...
+2026-04-10 20:01:38,116 - INFO - === STEP 3: EXPLORATORY DATA ANALYSIS ===
+2026-04-10 20:01:38,118 - INFO - Comparando 14 características comunes...
+2026-04-10 20:01:38,424 - INFO - Reporte visual EDA guardado en: /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/images/eda_boxplots.png
+2026-04-10 20:01:38,424 - INFO - === STEP 4: DATA AUGMENTATION (INFO) ===
+2026-04-10 20:01:38,424 - INFO - Aumento de datos offline desactivado. Se realizará ONLINE durante el entrenamiento para evitar Data Leakage.
+2026-04-10 20:01:38,424 - INFO - === STEP 5: SAVING VISUALIZATIONS ===
+2026-04-10 20:01:39,134 - INFO - Visualización guardada con éxito en: /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/images/summary_benign.png
+2026-04-10 20:01:39,831 - INFO - Visualización guardada con éxito en: /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/images/summary_malignant.png
+2026-04-10 20:01:39,834 - INFO - Pipeline ejecutado con éxito.
