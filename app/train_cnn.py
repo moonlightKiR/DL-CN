@@ -3,7 +3,6 @@ from pathlib import Path
 from cnn import CNNConfig, MelanomaNet, MelanomaDataModule, MelanomaTrainer
 
 # Configuración de logs para entrenamiento
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 def run_training():

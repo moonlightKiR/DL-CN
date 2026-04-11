@@ -1,0 +1,192 @@
+2026-04-11 18:14:48,678 - INFO - Ruta de ejecución detectada: /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN
+2026-04-11 18:14:48,678 - INFO - === STEP 1: SETUP DATA ===
+2026-04-11 18:14:48,678 - INFO - Datos ya organizados en data/train. Saltando extracción.
+2026-04-11 18:14:48,678 - INFO - === STEP 1.5: IMAGE ENHANCEMENT (FSRCNN + Laplacian) ===
+2026-04-11 18:14:48,754 - INFO - FSRCNN x4 (Luminancia) cargado con éxito en mps
+2026-04-11 18:14:48,953 - INFO - Iniciando Pipeline Rápido (FSRCNN + Laplaciano) en benign...
+2026-04-11 18:14:48,953 - INFO - Pipeline completado en benign.
+2026-04-11 18:14:49,105 - INFO - Iniciando Pipeline Rápido (FSRCNN + Laplaciano) en malignant...
+2026-04-11 18:14:49,105 - INFO - Pipeline completado en malignant.
+2026-04-11 18:14:49,105 - INFO - === STEP 2: PATTERN ANALYSIS ===
+2026-04-11 18:14:49,191 - INFO - Procesando 25156 imágenes en 'benign'...
+2026-04-11 18:21:16,534 - INFO - Ruta de ejecución detectada: /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN
+2026-04-11 18:21:16,534 - INFO - === STEP 1: SETUP DATA ===
+2026-04-11 18:21:16,534 - INFO - Starting decompression of 'melanoma_test_data.zip' into 'data/melanoma_test_data'...
+2026-04-11 18:21:16,874 - INFO - Decompression completed successfully. Total files: 2003
+2026-04-11 18:21:16,875 - INFO - Starting decompression of 'melanoma_train_data_benign.zip' into 'data/melanoma_train_data_benign'...
+2026-04-11 18:21:17,937 - INFO - Decompression completed successfully. Total files: 6290
+2026-04-11 18:21:17,938 - INFO - Starting decompression of 'melanoma_train_data_malignant.zip' into 'data/melanoma_train_data_malignant'...
+2026-04-11 18:21:18,846 - INFO - Decompression completed successfully. Total files: 5591
+2026-04-11 18:21:18,847 - INFO - Starting Melanoma data organization...
+2026-04-11 18:21:18,847 - INFO - Successfully moved: test -> /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/data/test
+2026-04-11 18:21:18,849 - INFO - Successfully moved: Benign -> /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/data/train/benign
+2026-04-11 18:21:18,850 - INFO - Successfully moved: Malignant -> /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/data/train/malignant
+2026-04-11 18:21:18,850 - INFO - Cleaning up residual directories...
+2026-04-11 18:21:18,851 - INFO - Successfully removed residual directory: /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/data/melanoma_test_data
+2026-04-11 18:21:18,851 - INFO - Successfully removed residual directory: /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/data/melanoma_train_data_benign
+2026-04-11 18:21:18,851 - INFO - Successfully removed residual directory: /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/data/melanoma_train_data_malignant
+2026-04-11 18:21:18,851 - INFO - Organization and cleanup complete.
+2026-04-11 18:21:18,851 - INFO - === STEP 1.5: IMAGE ENHANCEMENT (FSRCNN + Laplacian) ===
+2026-04-11 18:21:18,908 - INFO - FSRCNN x4 (Luminancia) cargado con éxito en mps
+2026-04-11 18:21:18,945 - INFO - Iniciando Pipeline Rápido (FSRCNN + Laplaciano) en benign...
+2026-04-11 18:21:19,396 - INFO - Progreso benign: 0/6289
+2026-04-11 18:21:22,332 - INFO - Progreso benign: 100/6289
+2026-04-11 18:21:25,266 - INFO - Progreso benign: 200/6289
+2026-04-11 18:21:28,191 - INFO - Progreso benign: 300/6289
+2026-04-11 18:21:31,083 - INFO - Progreso benign: 400/6289
+2026-04-11 18:21:34,010 - INFO - Progreso benign: 500/6289
+2026-04-11 18:21:36,920 - INFO - Progreso benign: 600/6289
+2026-04-11 18:21:39,847 - INFO - Progreso benign: 700/6289
+2026-04-11 18:21:42,768 - INFO - Progreso benign: 800/6289
+2026-04-11 18:21:45,658 - INFO - Progreso benign: 900/6289
+2026-04-11 18:21:48,571 - INFO - Progreso benign: 1000/6289
+2026-04-11 18:21:51,548 - INFO - Progreso benign: 1100/6289
+2026-04-11 18:21:54,700 - INFO - Progreso benign: 1200/6289
+2026-04-11 18:21:57,972 - INFO - Progreso benign: 1300/6289
+2026-04-11 18:22:01,065 - INFO - Progreso benign: 1400/6289
+2026-04-11 18:22:04,069 - INFO - Progreso benign: 1500/6289
+2026-04-11 18:22:07,054 - INFO - Progreso benign: 1600/6289
+2026-04-11 18:22:10,057 - INFO - Progreso benign: 1700/6289
+2026-04-11 18:22:12,964 - INFO - Progreso benign: 1800/6289
+2026-04-11 18:22:15,829 - INFO - Progreso benign: 1900/6289
+2026-04-11 18:22:18,792 - INFO - Progreso benign: 2000/6289
+2026-04-11 18:22:21,614 - INFO - Progreso benign: 2100/6289
+2026-04-11 18:22:24,557 - INFO - Progreso benign: 2200/6289
+2026-04-11 18:22:27,417 - INFO - Progreso benign: 2300/6289
+2026-04-11 18:22:30,274 - INFO - Progreso benign: 2400/6289
+2026-04-11 18:22:33,198 - INFO - Progreso benign: 2500/6289
+2026-04-11 18:22:36,099 - INFO - Progreso benign: 2600/6289
+2026-04-11 18:22:38,962 - INFO - Progreso benign: 2700/6289
+2026-04-11 18:22:41,893 - INFO - Progreso benign: 2800/6289
+2026-04-11 18:22:44,765 - INFO - Progreso benign: 2900/6289
+2026-04-11 18:22:47,723 - INFO - Progreso benign: 3000/6289
+2026-04-11 18:22:50,611 - INFO - Progreso benign: 3100/6289
+2026-04-11 18:22:53,498 - INFO - Progreso benign: 3200/6289
+2026-04-11 18:22:56,407 - INFO - Progreso benign: 3300/6289
+2026-04-11 18:22:59,374 - INFO - Progreso benign: 3400/6289
+2026-04-11 18:23:02,272 - INFO - Progreso benign: 3500/6289
+2026-04-11 18:23:05,249 - INFO - Progreso benign: 3600/6289
+2026-04-11 18:23:08,205 - INFO - Progreso benign: 3700/6289
+2026-04-11 18:23:11,188 - INFO - Progreso benign: 3800/6289
+2026-04-11 18:23:14,115 - INFO - Progreso benign: 3900/6289
+2026-04-11 18:23:17,018 - INFO - Progreso benign: 4000/6289
+2026-04-11 18:23:19,977 - INFO - Progreso benign: 4100/6289
+2026-04-11 18:23:22,889 - INFO - Progreso benign: 4200/6289
+2026-04-11 18:23:25,784 - INFO - Progreso benign: 4300/6289
+2026-04-11 18:23:28,717 - INFO - Progreso benign: 4400/6289
+2026-04-11 18:23:31,669 - INFO - Progreso benign: 4500/6289
+2026-04-11 18:23:34,666 - INFO - Progreso benign: 4600/6289
+2026-04-11 18:23:37,613 - INFO - Progreso benign: 4700/6289
+2026-04-11 18:23:40,517 - INFO - Progreso benign: 4800/6289
+2026-04-11 18:23:43,462 - INFO - Progreso benign: 4900/6289
+2026-04-11 18:23:46,538 - INFO - Progreso benign: 5000/6289
+2026-04-11 18:23:49,696 - INFO - Progreso benign: 5100/6289
+2026-04-11 18:23:52,795 - INFO - Progreso benign: 5200/6289
+2026-04-11 18:23:55,883 - INFO - Progreso benign: 5300/6289
+2026-04-11 18:23:59,020 - INFO - Progreso benign: 5400/6289
+2026-04-11 18:24:02,126 - INFO - Progreso benign: 5500/6289
+2026-04-11 18:24:05,217 - INFO - Progreso benign: 5600/6289
+2026-04-11 18:24:08,613 - INFO - Progreso benign: 5700/6289
+2026-04-11 18:24:11,898 - INFO - Progreso benign: 5800/6289
+2026-04-11 18:24:15,032 - INFO - Progreso benign: 5900/6289
+2026-04-11 18:24:18,185 - INFO - Progreso benign: 6000/6289
+2026-04-11 18:24:21,298 - INFO - Progreso benign: 6100/6289
+2026-04-11 18:24:24,351 - INFO - Progreso benign: 6200/6289
+2026-04-11 18:24:27,120 - INFO - Pipeline completado en benign.
+2026-04-11 18:24:27,149 - INFO - Iniciando Pipeline Rápido (FSRCNN + Laplaciano) en malignant...
+2026-04-11 18:24:27,183 - INFO - Progreso malignant: 0/5590
+2026-04-11 18:24:30,444 - INFO - Progreso malignant: 100/5590
+2026-04-11 18:24:33,536 - INFO - Progreso malignant: 200/5590
+2026-04-11 18:24:36,722 - INFO - Progreso malignant: 300/5590
+2026-04-11 18:24:39,905 - INFO - Progreso malignant: 400/5590
+2026-04-11 18:24:43,084 - INFO - Progreso malignant: 500/5590
+2026-04-11 18:24:46,338 - INFO - Progreso malignant: 600/5590
+2026-04-11 18:24:49,467 - INFO - Progreso malignant: 700/5590
+2026-04-11 18:24:52,595 - INFO - Progreso malignant: 800/5590
+2026-04-11 18:24:55,768 - INFO - Progreso malignant: 900/5590
+2026-04-11 18:24:59,162 - INFO - Progreso malignant: 1000/5590
+2026-04-11 18:25:02,351 - INFO - Progreso malignant: 1100/5590
+2026-04-11 18:25:05,521 - INFO - Progreso malignant: 1200/5590
+2026-04-11 18:25:08,593 - INFO - Progreso malignant: 1300/5590
+2026-04-11 18:25:11,640 - INFO - Progreso malignant: 1400/5590
+2026-04-11 18:25:14,796 - INFO - Progreso malignant: 1500/5590
+2026-04-11 18:25:17,830 - INFO - Progreso malignant: 1600/5590
+2026-04-11 18:25:20,936 - INFO - Progreso malignant: 1700/5590
+2026-04-11 18:25:24,018 - INFO - Progreso malignant: 1800/5590
+2026-04-11 18:25:27,015 - INFO - Progreso malignant: 1900/5590
+2026-04-11 18:25:30,138 - INFO - Progreso malignant: 2000/5590
+2026-04-11 18:25:33,189 - INFO - Progreso malignant: 2100/5590
+2026-04-11 18:25:36,309 - INFO - Progreso malignant: 2200/5590
+2026-04-11 18:25:39,317 - INFO - Progreso malignant: 2300/5590
+2026-04-11 18:25:42,334 - INFO - Progreso malignant: 2400/5590
+2026-04-11 18:25:45,432 - INFO - Progreso malignant: 2500/5590
+2026-04-11 18:25:48,492 - INFO - Progreso malignant: 2600/5590
+2026-04-11 18:25:51,610 - INFO - Progreso malignant: 2700/5590
+2026-04-11 18:25:54,693 - INFO - Progreso malignant: 2800/5590
+2026-04-11 18:25:57,708 - INFO - Progreso malignant: 2900/5590
+2026-04-11 18:26:00,809 - INFO - Progreso malignant: 3000/5590
+2026-04-11 18:26:03,898 - INFO - Progreso malignant: 3100/5590
+2026-04-11 18:26:07,067 - INFO - Progreso malignant: 3200/5590
+2026-04-11 18:26:10,146 - INFO - Progreso malignant: 3300/5590
+2026-04-11 18:26:13,236 - INFO - Progreso malignant: 3400/5590
+2026-04-11 18:26:16,255 - INFO - Progreso malignant: 3500/5590
+2026-04-11 18:26:19,267 - INFO - Progreso malignant: 3600/5590
+2026-04-11 18:26:22,330 - INFO - Progreso malignant: 3700/5590
+2026-04-11 18:26:25,374 - INFO - Progreso malignant: 3800/5590
+2026-04-11 18:26:28,392 - INFO - Progreso malignant: 3900/5590
+2026-04-11 18:26:31,478 - INFO - Progreso malignant: 4000/5590
+2026-04-11 18:26:34,582 - INFO - Progreso malignant: 4100/5590
+2026-04-11 18:26:37,582 - INFO - Progreso malignant: 4200/5590
+2026-04-11 18:26:40,728 - INFO - Progreso malignant: 4300/5590
+2026-04-11 18:26:43,812 - INFO - Progreso malignant: 4400/5590
+2026-04-11 18:26:46,793 - INFO - Progreso malignant: 4500/5590
+2026-04-11 18:26:49,865 - INFO - Progreso malignant: 4600/5590
+2026-04-11 18:26:52,846 - INFO - Progreso malignant: 4700/5590
+2026-04-11 18:26:55,808 - INFO - Progreso malignant: 4800/5590
+2026-04-11 18:26:58,861 - INFO - Progreso malignant: 4900/5590
+2026-04-11 18:27:01,962 - INFO - Progreso malignant: 5000/5590
+2026-04-11 18:27:05,033 - INFO - Progreso malignant: 5100/5590
+2026-04-11 18:27:07,993 - INFO - Progreso malignant: 5200/5590
+2026-04-11 18:27:11,073 - INFO - Progreso malignant: 5300/5590
+2026-04-11 18:27:14,087 - INFO - Progreso malignant: 5400/5590
+2026-04-11 18:27:17,191 - INFO - Progreso malignant: 5500/5590
+2026-04-11 18:27:19,891 - INFO - Pipeline completado en malignant.
+2026-04-11 18:27:19,896 - INFO - === STEP 2: PATTERN ANALYSIS ===
+2026-04-11 18:27:19,928 - INFO - Procesando 6289 imágenes en 'benign'...
+2026-04-11 18:29:37,925 - INFO - Procesando 5590 imágenes en 'malignant'...
+2026-04-11 18:31:38,725 - INFO - === STEP 3: EXPLORATORY DATA ANALYSIS ===
+2026-04-11 18:31:38,727 - INFO - Comparando 14 características comunes...
+2026-04-11 18:31:39,143 - INFO - Reporte visual EDA guardado en: /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/images/eda_boxplots.png
+2026-04-11 18:31:39,143 - INFO - === STEP 4: DATA AUGMENTATION (OFFLINE) ===
+2026-04-11 18:31:39,162 - INFO - Iniciando aumento de datos en /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/data/train/benign (6289 imágenes)...
+2026-04-11 18:33:47,876 - INFO - Aumento completado con éxito en /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/data/train/benign.
+2026-04-11 18:33:47,892 - INFO - Iniciando aumento de datos en /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/data/train/malignant (5590 imágenes)...
+2026-04-11 18:35:41,584 - INFO - Aumento completado con éxito en /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/data/train/malignant.
+2026-04-11 18:35:41,585 - INFO - === STEP 4.5: POST-AUGMENTATION ANALYSIS ===
+2026-04-11 18:35:41,683 - INFO - Procesando 25156 imágenes en 'benign'...
+2026-04-11 18:43:36,147 - INFO - Procesando 22360 imágenes en 'malignant'...
+2026-04-11 18:50:53,101 - INFO - Comparando 14 características comunes...
+2026-04-11 18:50:53,468 - INFO - Reporte visual EDA guardado en: /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/images/eda_boxplots_augmented.png
+2026-04-11 18:50:53,469 - INFO - === STEP 5: SAVING VISUALIZATIONS ===
+2026-04-11 18:50:54,736 - INFO - Visualización guardada con éxito en: /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/images/summary_benign.png
+2026-04-11 18:50:56,064 - INFO - Visualización guardada con éxito en: /Users/guille/Documents/LASALLE/MASTER/DeepLearning/DL-CNN/images/summary_malignant.png
+2026-04-11 18:50:56,064 - INFO - === STEP 5.5: HYPERPARAMETER SEARCH (OPTUNA) ===
+2026-04-11 18:50:56,064 - INFO - ✅ Hiperparámetros encontrados en models/cnn/best_hyperparams.json. Saltando búsqueda.
+2026-04-11 18:50:56,064 - INFO - === STEP 6: CNN TRAINING ===
+2026-04-11 18:50:56,064 - INFO - === INICIANDO PIPELINE DE ENTRENAMIENTO CNN ===
+2026-04-11 18:50:56,064 - INFO - ✅ Hiperparámetros cargados desde models/cnn/best_hyperparams.json
+2026-04-11 18:50:56,139 - INFO - Dataloaders listos: 38012 entrenamiento, 9504 validación.
+2026-04-11 18:50:56,146 - INFO - Modelo MelanomaNet inicializado con 202,690 parámetros.
+2026-04-11 18:50:56,175 - INFO - Iniciando entrenamiento en mps con Early Stopping activo.
+2026-04-11 18:53:32,070 - INFO - Época [1/30] | T-Loss: 0.4975 T-Acc: 79.77% | V-Loss: 0.5270 V-Acc: 78.05%
+2026-04-11 18:53:32,116 - INFO - Nuevo récord de precisión: 78.05% (Modelo guardado)
+2026-04-11 18:56:05,831 - INFO - Época [2/30] | T-Loss: 0.4575 T-Acc: 82.83% | V-Loss: 0.4474 V-Acc: 83.09%
+2026-04-11 18:56:05,880 - INFO - Nuevo récord de precisión: 83.09% (Modelo guardado)
+2026-04-11 18:58:12,755 - INFO - Época [3/30] | T-Loss: 0.4448 T-Acc: 83.80% | V-Loss: 0.4203 V-Acc: 85.70%
+2026-04-11 18:58:12,803 - INFO - Nuevo récord de precisión: 85.70% (Modelo guardado)
+2026-04-11 19:00:11,102 - INFO - Época [4/30] | T-Loss: 0.4328 T-Acc: 84.68% | V-Loss: 0.4227 V-Acc: 86.12%
+2026-04-11 19:00:11,143 - INFO - Nuevo récord de precisión: 86.12% (Modelo guardado)
+2026-04-11 19:02:09,882 - INFO - Época [5/30] | T-Loss: 0.4258 T-Acc: 85.32% | V-Loss: 0.4200 V-Acc: 86.15%
+2026-04-11 19:02:09,915 - INFO - Nuevo récord de precisión: 86.15% (Modelo guardado)
+2026-04-11 19:04:08,230 - INFO - Época [6/30] | T-Loss: 0.4209 T-Acc: 85.52% | V-Loss: 0.4015 V-Acc: 86.27%
+2026-04-11 19:04:08,283 - INFO - Nuevo récord de precisión: 86.27% (Modelo guardado)

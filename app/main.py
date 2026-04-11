@@ -18,18 +18,18 @@ from eda.comparasion import DescriptiveStatsComparator, EDAComparisonService
 from eda.data_augmentation import get_default_augmentation_service
 from data.data_viewer import get_default_viewer
 from train_cnn import run_training
+from hyperparam_search import run_study # 👈 Importamos la búsqueda de hiperparámetros
 
 # Configuración de Logging y Directorios
 log_dir = Path("log")
 log_dir.mkdir(exist_ok=True)
-timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-log_path = log_dir / f"pipeline_{timestamp}.log"
+log_path = log_dir / "pipeline.log" # 👈 Nombre fijo para evitar múltiples archivos
 
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(log_path, encoding='utf-8'),
+        logging.FileHandler(log_path, encoding='utf-8', mode='a'), # 'a' para añadir al final
         logging.StreamHandler() 
     ],
     force=True 
@@ -109,8 +109,8 @@ def run_pipeline():
         # 4. AUGMENTATION
         logger.info("=== STEP 4: DATA AUGMENTATION (OFFLINE) ===")
         aug_service = get_default_augmentation_service()
-        aug_service.augment_directory(train_path / "benign", variants_per_image=3)
-        aug_service.augment_directory(train_path / "malignant", variants_per_image=3)
+        aug_service.augment_directory(train_path / "benign", variants_per_image=1)
+        aug_service.augment_directory(train_path / "malignant", variants_per_image=1)
 
         # 4.5 POST-AUGMENTATION ANALYSIS
         logger.info("=== STEP 4.5: POST-AUGMENTATION ANALYSIS ===")
@@ -134,6 +134,15 @@ def run_pipeline():
         viewer = get_default_viewer()
         viewer.visualize_category(train_path / "benign", limit=20, save_path=output_folder / "summary_benign.png")
         viewer.visualize_category(train_path / "malignant", limit=20, save_path=output_folder / "summary_malignant.png")
+
+        # 5.5 HYPERPARAMETER SEARCH (OPTUNA)
+        logger.info("=== STEP 5.5: HYPERPARAMETER SEARCH (OPTUNA) ===")
+        best_params_path = Path("models/cnn/best_hyperparams.json")
+        if not best_params_path.exists():
+            logger.info("No se encontraron hiperparámetros. Iniciando búsqueda con Optuna...")
+            run_study()
+        else:
+            logger.info(f"✅ Hiperparámetros encontrados en {best_params_path}. Saltando búsqueda.")
 
         # 6. TRAINING
         logger.info("=== STEP 6: CNN TRAINING ===")
